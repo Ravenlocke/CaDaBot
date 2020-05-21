@@ -186,12 +186,16 @@ def run(sub):
         # Get the time now in UTC.
         tnow = datetime.datetime.utcnow()
 
-        # Rest between 11 pm and 1 am UTC.
+        # Sleep for 20 minutes ~23:45 to give the DB a chance to be purged.
         if tnow.hour == 23 and tnow.minute > 45:
             logger.info(f"Sleeping for 16 minutes UTC (currently {tnow})")
-            time.sleep(60 * 16)
+            time.sleep(60 * 20)
 
         if post is None:
+            continue
+
+        if hasattr(post.author, "is_suspended") and post.author.is_suspended:
+            logger.warning("Encountered suspended user, skipping")
             continue
 
         # Get the date / time posted, and check it was today.
