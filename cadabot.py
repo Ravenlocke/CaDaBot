@@ -1,17 +1,17 @@
 import datetime
-from functools import partial
+import os
 import random
 import threading
-import os
 import time
+from functools import partial
 
-from sqlitedict import SqliteDict
 import inflect
 import praw
-from loguru import logger
 import schedule
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from dotenv import load_dotenv
+from loguru import logger
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from sqlitedict import SqliteDict
 
 load_dotenv()
 
@@ -136,7 +136,7 @@ def post_if_response_to_cakeday_wish(post, tnow):
         return
 
     # If the post is not a thank you post, return.
-    if not ("thank" in post.body.lower() or "thank you" in post.body.lower()):
+    if not "thank" in post.body.lower():
         return
 
     polarity = sia.polarity_scores(post.body)
